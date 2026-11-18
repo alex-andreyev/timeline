@@ -4,7 +4,7 @@
  */
 
 import { History } from '../core/commands';
-import { dateOf, formatRange, isNow, midOf, todayDay } from '../core/dates';
+import { dateOf, formatRange, isNow, midOf, todayDay, todayIso } from '../core/dates';
 import { language, t, tn } from '../core/i18n';
 import { extentOf, parseDoc, serializeDoc, usedImages, type Doc, type Warning } from '../core/model';
 import { pxPerDayOf } from '../core/scale';
@@ -201,7 +201,7 @@ async function offerDraft(session: Session): Promise<void> {
  * ------------------------------------------------------------------ */
 
 function stampModified(doc: Doc): void {
-  doc.meta.modified = new Date().toISOString().slice(0, 10);
+  doc.meta.modified = todayIso();
   doc.meta.generator = `timeline ${__APP_VERSION__}`;
 }
 
