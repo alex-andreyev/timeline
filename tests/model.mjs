@@ -1,7 +1,7 @@
 /** timeline.json: validation with exact warnings, forward compatibility, deterministic output (Task §3, §11). */
 import { checker, load } from '../tools/load.mjs';
 
-const { parseDoc, serializeDoc, colorOf, rankOf, extentOf, usedImages, missingImages, ModelError, ID_PATTERN, parseMarkdown, plainText, dayOf, compareItems, inTimeOrder, periodHolds, periodsAt, eventsOf, detachFrom, hiddenPeriods } = await load('core/model', 'core/markdown', 'core/dates');
+const { parseDoc, serializeDoc, colorOf, rankOf, extentOf, usedImages, missingImages, ModelError, ID_PATTERN, parseMarkdown, plainText, dayOf, compareItems, inTimeOrder, periodHolds, periodsAt, eventsOf, detachFrom, hiddenPeriods, emptyDoc } = await load('core/model', 'core/markdown', 'core/dates');
 const { check, done } = checker();
 
 const good = {
@@ -255,7 +255,8 @@ for (const [name, json, expected] of /** @type {[string, unknown, string][]} */ 
 
 {
   // The chronology's own beginning and end: they set the extent, widened to every item.
-  const now = new Date(Date.UTC(2026, 9, 13));
+  // Noon by the device's clock: 13 October in every time zone (UTC's midnight is still the 12th west of Greenwich).
+  const now = new Date(2026, 9, 13, 12);
   const base = { format: 'timeline', version: 1, meta: { id: 'x', kind: 'history' }, title: 'X', items: [{ id: 'a', kind: 'event', start: { y: 1950 }, title: 'A' }] };
   const { doc, warnings } = parseDoc({ ...base, start: { y: 1900 }, end: { now: true } });
   check('start and end are read', [warnings, doc.start, doc.end], [[], { y: 1900 }, { now: true }]);
@@ -266,6 +267,13 @@ for (const [name, json, expected] of /** @type {[string, unknown, string][]} */ 
   check('an item outside the start is never cut off', extentOf(inside.doc, now)[0], dayOf(1950, 1, 1));
   const empty = parseDoc({ ...base, items: [], start: { y: 1990, m: 5, d: 17 }, end: { now: true } }).doc;
   check('an empty file with dates spans them', extentOf(empty, now), [dayOf(1990, 5, 17), dayOf(2026, 10, 14)]);
+  // A new file is dated by the device's calendar: 20:30 in Los Angeles is already tomorrow in UTC, not here.
+  const zone = process.env.TZ;
+  process.env.TZ = 'America/Los_Angeles';
+  const fresh = emptyDoc('history', 'x', 'X', 'en', 'test', new Date(2026, 9, 13, 20, 30));
+  if (zone === undefined) delete process.env.TZ;
+  else process.env.TZ = zone;
+  check('a new file is created on the device’s day', [fresh.meta.created, fresh.meta.modified], ['2026-10-13', '2026-10-13']);
   check('bad dates are dropped', parseDoc({ ...base, start: 'soon', end: { y: 'x' } }).warnings.map((w) => w.path), ['start', 'end']);
 }
 

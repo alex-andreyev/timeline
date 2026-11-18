@@ -111,6 +111,14 @@ export function today(now = new Date()): When {
 
 export const todayDay = (now = new Date()): number => startOf(today(now));
 
+/**
+ * Today by the device's calendar as a file's `created` and `modified` write it:
+ * "2026-10-17". Not toISOString(): that is UTC's day, which in the evening west
+ * of Greenwich is already tomorrow, and after midnight east of it still yesterday.
+ */
+export const todayIso = (now = new Date()): string =>
+  [String(now.getFullYear()).padStart(4, '0'), String(now.getMonth() + 1).padStart(2, '0'), String(now.getDate()).padStart(2, '0')].join('-');
+
 /** The day after a period's last day; "now" is the end of today. */
 export const endDay = (end: End, now = new Date()): number => (isNow(end) ? todayDay(now) + 1 : endOf(end));
 

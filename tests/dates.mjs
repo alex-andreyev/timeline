@@ -1,7 +1,7 @@
 /** Day numbers, calendars, display and the source date strings (Task §11). */
 import { checker, load } from '../tools/load.mjs';
 
-const { dayOf, dateOf, isLeap, daysInMonth, startOf, endOf, midOf, formatWhen, formatYear, formatRange, formatDuration, parseWhen, whenText, snapTo, shiftWhen, weekday, isValidWhen, setLanguage } = await load('core/dates', 'core/i18n');
+const { dayOf, dateOf, isLeap, daysInMonth, startOf, endOf, midOf, formatWhen, formatYear, formatRange, formatDuration, parseWhen, whenText, snapTo, shiftWhen, weekday, isValidWhen, setLanguage, todayIso } = await load('core/dates', 'core/i18n');
 const { check, done } = checker();
 const NB = ' ';
 const nb = (s) => s.replaceAll(' ', NB);
@@ -122,6 +122,19 @@ for (const bad of ['', 'yesterday', '2000-02-30', '2000-13', 'BC 30']) check(`pa
   for (const lang of ['en', 'ru']) check(`dates as text round-trip in ${lang}`, dates.map((w) => parseWhen(whenText(w, lang))), dates);
   check('month names, short and long, in either language', [parseWhen('Oct 1517'), parseWhen('31 October 1517'), parseWhen('31 октября 1517'), parseWhen('май 2001')], [{ y: 1517, m: 10 }, { y: 1517, m: 10, d: 31 }, { y: 1517, m: 10, d: 31 }, { y: 2001, m: 5 }]);
   check('not a month, not a date', [parseWhen('AD 30'), parseWhen('Foo 1517'), parseWhen('31 Feb 2001')], [{ y: 30 }, null, null]);
+}
+
+{
+  // A file's dates are the device's day, not UTC's: 20:30 in Los Angeles is already tomorrow in UTC, 01:30 in Moscow still yesterday.
+  const zone = process.env.TZ;
+  /** `todayIso` at a local time (month from 0, as Date counts) in time zone `tz`. */
+  const inZone = (tz, y, m, d, hour, minute) => {
+    process.env.TZ = tz;
+    return todayIso(new Date(y, m, d, hour, minute));
+  };
+  check('today as a file writes it, by the device’s calendar', [inZone('America/Los_Angeles', 2026, 9, 13, 20, 30), inZone('Europe/Moscow', 2026, 9, 13, 1, 30), inZone('UTC', 2026, 0, 5, 12, 0)], ['2026-10-13', '2026-10-13', '2026-01-05']);
+  if (zone === undefined) delete process.env.TZ;
+  else process.env.TZ = zone;
 }
 
 done('dates');

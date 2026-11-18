@@ -17,7 +17,7 @@
  * the edit that was made.
  */
 
-import { endDay, endOf, isNow, isValidWhen, midOf, startOf, todayDay, YEAR_DAYS, type End, type When } from './dates';
+import { endDay, endOf, isNow, isValidWhen, midOf, startOf, todayDay, todayIso, YEAR_DAYS, type End, type When } from './dates';
 import { t } from './i18n';
 import { isUnit, type ScaleSpec } from './scale';
 
@@ -873,7 +873,7 @@ export const hiddenPeriods = (doc: Doc): Set<string> => new Set(doc.items.filter
 
 /** A new, empty chronology. */
 export function emptyDoc(kind: DocKind, id: string, title: string, lang: string, generator: string, now = new Date()): Doc {
-  const day = now.toISOString().slice(0, 10);
+  const day = todayIso(now);
   return {
     format: FORMAT,
     version: VERSION,
