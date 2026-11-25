@@ -100,10 +100,10 @@ disk.
   paper), the colour of items without one of their own, serif or sans titles; and, if you
   like, **background music** (any MP3, M4A, WAV… file). Whoever opens the file sees the same;
   one undo takes it back.
-- **Music**: a timeline's own music plays quietly, in a loop, while it is open — faded in,
-  paused while the page is hidden. The speaker in the toolbar (shown only for a file with
-  music) and Settings → "Play background music" turn it off for every file. Where the browser
-  wants a click before any sound, the first click or key starts it.
+- **Music**: a timeline's own music is off until you turn it on: the speaker in the toolbar
+  (shown only for a file with music) or Settings → "Play background music", for every file.
+  Then it plays quietly, in a loop, while the timeline is open — faded in, paused while the
+  page is hidden.
 - **Galleries**: an item has one picture or many. The first is on its card; a large card
   shows the next two beside it, a normal one a count. The details panel steps through them
   with arrows, thumbs or a swipe, and a click shows them full screen (← → to step, Esc to
@@ -244,7 +244,7 @@ version fixed on disk, take `timeline-<tag>.html` from a release and compare it 
 The PWA can show a shelf of chronologies beside it on the site (`library/index.json` and
 the files it lists). `npm run build` puts none there; `npm run build -- --library DIR` copies
 `DIR` to `build/pages/library/`. The Pages workflow builds with this repository's `library/`:
-an `index.json` whose files and covers are on another site, by https:// address.
+four chronologies, in English and Russian, with their covers, kept in it beside `index.json`.
 [docs/format.md](docs/format.md#a-library) describes a library, and
 `node tools/check.mjs library/` checks one.
 
@@ -277,7 +277,7 @@ an `index.json` whose files and covers are on another site, by https:// address.
 | `src/app/properties.ts`, `look.ts` | Timeline settings and New timeline: the file's texts, cover, dates, second ruler, opening scale and look; the look on the page |
 | `src/app/music.ts` | a timeline's background music: playing, fading, pausing, the toolbar's speaker |
 | `src/app/main.ts`, `settings.ts`, `ui.ts` | start-up, toolbar, settings, toasts and dialogs |
-| `library/index.json` | the shelf of this repository's GitHub Pages: chronologies kept on another site, by address (`npm run build -- --library library`) |
+| `library/` | the shelf of this repository's GitHub Pages: `index.json`, the `.timeline` files and their covers (`npm run build -- --library library`) |
 | `assets/` | the icon and the PWA's icons (`tools/icons.mjs` renders them from `icon.svg`) |
 | `tools/` | `check` (files and libraries, as the app reads them), `shots`, `icons`, `i18n`, `chrome` (DevTools protocol), `load` (src/ for Node), `sample` (test files) |
 | `docs/format.md` | the `.timeline` file and a library, for whoever makes them |

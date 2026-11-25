@@ -33,7 +33,7 @@ jobs:
           cache: npm
 
       - run: npm ci
-      # With this repository's library/: the shelf lists chronologies kept on another site.
+      # With this repository's library/: the shelf's chronologies and covers, kept beside index.json.
       - run: npm run build -- --library library
 
       - uses: actions/configure-pages@v5

@@ -10,7 +10,7 @@
  * Pages — a manifest, icons, a service worker that keeps it offline. Its shelf
  * shows the chronologies of a library/ folder beside it on the site: the build
  * puts one there only when given it, `--library DIR` (the Pages workflow gives
- * this repository's library/, a list of files kept on another site).
+ * this repository's library/: the files, their covers and index.json).
  *
  * The version is package.json's and nowhere else: the page shows it, writes it
  * into every file it saves (meta.generator), and the PWA's cache is named after it.

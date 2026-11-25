@@ -20,7 +20,7 @@ export interface Settings {
   /** The anchor ruler (AM, age…), when the file has an anchor. */
   secondRuler: boolean;
   reduceMotion: boolean;
-  /** A timeline's own background music, where it has some. */
+  /** A timeline's own background music, where it has some: off until the reader turns it on. */
   music: boolean;
 }
 
@@ -32,7 +32,7 @@ const DEFAULTS: Readonly<Settings> = {
   hidePeriodEvents: true,
   secondRuler: true,
   reduceMotion: false,
-  music: true,
+  music: false,
 };
 
 const KEY = 'timeline.settings';

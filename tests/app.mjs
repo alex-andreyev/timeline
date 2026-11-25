@@ -522,14 +522,11 @@ try {
   await shot(tab, '16-timeline-settings');
   await ev(tab, "document.querySelector('dialog[open] .button--primary').click()");
   check('…the author is kept in the file', await chrome.until(tab, "JSON.stringify(timeline.session.doc.author) === JSON.stringify({ name: 'Anna Petrova', url: 'https://anna.example.org', contact: 'anna@example.org' })"), true);
-  check('…the music is the file’s, and plays', await chrome.until(tab, "timeline.session.doc.music?.ext === 'wav' && timeline.session.doc.music.title === 'A quiet tone' && !document.getElementById('music-toggle').hidden"), true);
-  // A browser may wait for the reader's hand before sound: a click on the title is one.
-  await chrome.click(tab, '#doc-title');
-  check('…playing, at the latest after the first click', await chrome.until(tab, "document.getElementById('music-toggle').dataset.state === 'playing'", 5000), true);
+  check('…the music is the file’s; the speaker shows, and it is off until the reader turns it on', await chrome.until(tab, "timeline.session.doc.music?.ext === 'wav' && timeline.session.doc.music.title === 'A quiet tone' && !document.getElementById('music-toggle').hidden && timeline.settings.music === false && document.getElementById('music-toggle').dataset.state === 'off'"), true);
   await chrome.click(tab, '#music-toggle');
-  check('…the speaker turns it off, and the setting with it', await chrome.until(tab, "document.getElementById('music-toggle').getAttribute('aria-pressed') === 'false' && timeline.settings.music === false && document.getElementById('music-toggle').dataset.state === 'off'"), true);
+  check('…the speaker turns it on, and the setting with it', await chrome.until(tab, "document.getElementById('music-toggle').getAttribute('aria-pressed') === 'true' && timeline.settings.music === true && document.getElementById('music-toggle').dataset.state === 'playing'", 5000), true);
   await chrome.click(tab, '#music-toggle');
-  check('…and on again', await chrome.until(tab, "timeline.settings.music === true && document.getElementById('music-toggle').dataset.state === 'playing'", 5000), true);
+  check('…and off again', await chrome.until(tab, "timeline.settings.music === false && document.getElementById('music-toggle').dataset.state === 'off'"), true);
   check('…and kept in the file', await chrome.until(tab, "JSON.stringify([timeline.session.doc.style, timeline.session.doc.end]) === JSON.stringify([{ paper: '#e7eef6', texture: 'grid', font: 'sans' }, { now: true }])"), true);
   check('…squares, sans titles', await ev(tab, "[getComputedStyle(document.body).backgroundImage.startsWith('linear-gradient'), getComputedStyle(document.querySelector('.card-title') ?? document.body).fontFamily.includes('system-ui')]"), [true, true]);
   const viewBefore = await ev(tab, 'timeline.strip.view');
@@ -858,7 +855,12 @@ try {
     await chrome.until(reader, "!document.querySelector('dialog[open]')");
     await chrome.click(reader, '.card');
     check(`${label}: a card opens its details, with no Edit`, await chrome.until(reader, "!document.getElementById('details').hidden && ![...document.querySelectorAll('#details button')].some(b => b.textContent === 'Edit')"), true);
-    check(`${label}: the music plays`, await chrome.until(reader, "document.getElementById('music-toggle').dataset.state === 'playing'", 5000), true);
+    check(`${label}: the music is there, off until the reader turns it on`, await chrome.until(reader, "!document.getElementById('music-toggle').hidden && document.getElementById('music-toggle').dataset.state === 'off'"), true);
+    await chrome.click(reader, '#music-toggle');
+    check(`${label}: …and the speaker plays it`, await chrome.until(reader, "document.getElementById('music-toggle').dataset.state === 'playing'", 5000), true);
+    // Off again: pages opened from file:// share their settings, and the next one must start as a reader's would.
+    await chrome.click(reader, '#music-toggle');
+    await chrome.until(reader, "document.getElementById('music-toggle').dataset.state === 'off'");
     check(`${label}: the policy fetches nothing`, /connect-src 'none'/.test(await ev(reader, "document.querySelector('meta[http-equiv=Content-Security-Policy]').content")), true);
     return reader;
   };
