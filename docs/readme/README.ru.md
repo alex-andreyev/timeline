@@ -2,6 +2,10 @@
 
 [English](../../README.md) · **Русский**
 
+> Форк [MarketKernel/timeline](https://github.com/MarketKernel/timeline) 0.5.4, который с версии 0.9.1
+> развивается сам: привязка событий к периодам, список периодов со скрытием, исправления.
+> История оригинала сохранена, его будущие изменения по-прежнему можно влить.
+
 Просмотр и редактирование хронологий в одном HTML-файле. Время идёт слева направо, на нём
 стоят события, их можно взять рукой.
 
@@ -11,9 +15,9 @@ Timeline открывает файлы `.timeline` — по одному на х
 становится папкой с читаемым `timeline.json` и обычными изображениями. Сама страница не
 содержит никаких данных, никогда не выходит в сеть и работает с диска.
 
-- **Приложение**: откройте [time.marketkernel.com](https://time.marketkernel.com/) — полка
+- **Приложение**: откройте [alex-andreyev.github.io/timeline](https://alex-andreyev.github.io/timeline/) — полка
   хронологий для чтения; устанавливается, работает без сети.
-- **Файл**: `timeline-<тег>.html` из [Releases](https://github.com/MarketKernel/timeline/releases)
+- **Файл**: `timeline-<тег>.html` из [Releases](https://github.com/alex-andreyev/timeline/releases)
   — та же страница одним файлом: скачайте, откройте двойным щелчком, откройте `.timeline`.
 
 ## Как пользоваться
@@ -226,11 +230,12 @@ git push --follow-tags      # тег запускает .github/workflows/releas
 ```
 
 Workflow релиза останавливается, если тег и `package.json` расходятся, и прикладывает
-`timeline-<тег>.html` и `SHA256SUMS.txt`.
+`timeline-<тег>.html`, тот же файл под именем `timeline.html` (чтобы
+`releases/latest/download/timeline.html` всегда давал самый свежий) и `SHA256SUMS.txt`.
 
 ## GitHub Pages
 
-Приложение на [time.marketkernel.com](https://time.marketkernel.com/) — это GitHub Pages
+Приложение на [alex-andreyev.github.io/timeline](https://alex-andreyev.github.io/timeline/) — это GitHub Pages
 этого репозитория. `.github/workflows/pages.yml` на каждый push в `main` запускает `test.yml`, затем собирает и выкладывает
 `build/pages/` на GitHub Pages (Settings → Pages → Source: GitHub Actions). Каждая выкладка
 меняет имя кэша в `sw.js`, так что браузер сам находит новый service worker; установленное

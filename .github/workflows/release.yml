@@ -54,6 +54,8 @@ jobs:
         run: |
           mkdir -p dist
           cp build/timeline.html "dist/timeline-$RELEASE_TAG.html"
+          # Under a name that stays the same, so releases/latest/download/timeline.html is always the newest.
+          cp build/timeline.html dist/timeline.html
           # Computed from dist, or the sums file would hold a path, not a file name.
           ( cd dist && shasum -a 256 ./*.html > SHA256SUMS.txt )
           cat dist/SHA256SUMS.txt

@@ -2,6 +2,10 @@
 
 **English** · [Русский](docs/readme/README.ru.md)
 
+> A fork of [MarketKernel/timeline](https://github.com/MarketKernel/timeline) 0.5.4, developed on its own
+> from 0.9.1: events attached to periods, a list of periods to hide and show them, and fixes.
+> The original's history is kept, and its later changes can still be merged in.
+
 A chronology viewer and editor in one HTML file. Time runs left to right, things
 sit on it, you can grab them.
 
@@ -12,9 +16,9 @@ texts and pictures; renamed to `.zip` it is a folder with a readable `timeline.j
 ordinary images. The page holds no data at all, never touches the network, and works from a
 disk.
 
-- **The app**: open [time.marketkernel.com](https://time.marketkernel.com/) — a shelf of
+- **The app**: open [alex-andreyev.github.io/timeline](https://alex-andreyev.github.io/timeline/) — a shelf of
   chronologies to read, installable and offline.
-- **The file**: `timeline-<tag>.html` from [Releases](https://github.com/MarketKernel/timeline/releases)
+- **The file**: `timeline-<tag>.html` from [Releases](https://github.com/alex-andreyev/timeline/releases)
   — the same page in one file: download it, double-click it, open a `.timeline`.
 
 ## Using it
@@ -223,11 +227,12 @@ git push --follow-tags      # the tag starts .github/workflows/release.yml
 ```
 
 The release workflow stops if the tag and `package.json` disagree, then attaches
-`timeline-<tag>.html` and `SHA256SUMS.txt`.
+`timeline-<tag>.html`, the same file as `timeline.html` (so that
+`releases/latest/download/timeline.html` always gives the newest), and `SHA256SUMS.txt`.
 
 ## GitHub Pages
 
-The app at [time.marketkernel.com](https://time.marketkernel.com/) is this repository's
+The app at [alex-andreyev.github.io/timeline](https://alex-andreyev.github.io/timeline/) is this repository's
 GitHub Pages. `.github/workflows/pages.yml` runs `test.yml` on every push to `main`, then builds and deploys
 `build/pages/` to GitHub Pages (Settings → Pages → Source: GitHub Actions). Each deploy
 changes the cache name in `sw.js`, so the browser picks up the new worker by itself; the

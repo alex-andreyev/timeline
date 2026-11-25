@@ -1,10 +1,10 @@
 {
   "name": "timeline",
-  "version": "0.5.4",
+  "version": "0.9.1",
   "private": true,
   "description": "Timeline — a chronology viewer and editor in one HTML file; chronologies are .timeline files",
   "license": "MIT",
-  "homepage": "https://github.com/MarketKernel/timeline",
+  "homepage": "https://github.com/alex-andreyev/timeline",
   "type": "module",
   "engines": {
     "node": ">=22"
